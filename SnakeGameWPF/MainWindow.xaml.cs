@@ -1,14 +1,8 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SnakeGameWPF
 {
@@ -18,29 +12,42 @@ namespace SnakeGameWPF
     public partial class MainWindow : Window
     {
         private readonly int _numSquares = 20;
-        private readonly double _squareSize;
+        private double _squareSize;
         private readonly SolidColorBrush _evenColour = Brushes.LightGreen;
         private readonly SolidColorBrush _oddColour = Brushes.DarkGreen;
 
-        private SolidColorBrush _snakeHeadColour = Brushes.DarkBlue;
-        private SolidColorBrush _snakeBodyPartColour = Brushes.LightBlue;
+        private SolidColorBrush _snakeHeadColour = Brushes.Black;
+        private SolidColorBrush _snakeBodyPartColour = Brushes.Gray;
         private List<SnakeBodyPart> _snakeList = new List<SnakeBodyPart>();
 
         public enum SnakeDirection { Left, Right, Up, Down };
-        private SnakeDirection _snakeDirection = SnakeDirection.Right;
+        private SnakeDirection _snakeDirection;
         private int _snakeLength;
+
+        private readonly int _startLength = 2;
+        private readonly int _startSpeed = 1000;
+        private readonly int _speedThreshold = 100;
+
+        private readonly DispatcherTimer _dispatchTimer = new DispatcherTimer();
 
         public MainWindow()
         {
             InitializeComponent();
-            _squareSize = MainArea.ActualWidth / _numSquares;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            MoveSnake();
         }
 
         private void DrawMainArea()
         {
-            // Fill in the grid.
+            // Initialisations.
+            _squareSize = MainArea.ActualWidth / _numSquares;
             int counter = 0;
-            for(int row = 0; row < _numSquares; row++)
+
+            // Fill in the grid.
+            for (int row = 0; row < _numSquares; row++)
             {
                 for (int col = 0; col < _numSquares; col++)
                 {
@@ -57,23 +64,48 @@ namespace SnakeGameWPF
                 }
 
                 // For correct wrap-around depending on grid dimensions.
-                if(_numSquares % 2 == 0)
+                if (_numSquares % 2 == 0)
                 {
                     counter++;
                 }
             }
         }
 
+        private void StartNewGame()
+        {
+            // Initialise the snake's starting parameters.
+            _snakeLength = _startLength;
+            _snakeDirection = SnakeDirection.Right;
+            double startRow = _squareSize * (int)(_numSquares / 2);
+            double startCol = startRow;
+            _snakeList.Add(new SnakeBodyPart()
+            {
+                Position = new Point(startRow, startCol),
+                IsHead = true
+            });
+
+            DrawSnake();
+
+            // Initialise the dispatch timer.
+            _dispatchTimer.Interval = TimeSpan.FromMilliseconds(_startSpeed);
+            _dispatchTimer.Tick += Timer_Tick;
+            _dispatchTimer.Start();
+        }
+
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             DrawMainArea();
+            StartNewGame();
         }
 
+        /// <summary>
+        /// Places the snake head and body parts onto the canvas. 
+        /// </summary>
         private void DrawSnake()
         {
-            foreach(SnakeBodyPart snakeBodyPart in _snakeList)
+            foreach (SnakeBodyPart snakeBodyPart in _snakeList)
             {
-                if(snakeBodyPart.UiElement == null)
+                if (snakeBodyPart.UiElement == null)
                 {
                     snakeBodyPart.UiElement = new Rectangle
                     {
@@ -97,20 +129,20 @@ namespace SnakeGameWPF
         private void MoveSnake()
         {
             // Remove the current tail of the snake. Defined as the first element.
-            while(_snakeList.Count >= _snakeLength)
+            while (_snakeList.Count >= _snakeLength)
             {
                 MainArea.Children.Remove(_snakeList[0].UiElement);
                 _snakeList.RemoveAt(0);
             }
 
-            // Mark the remaining parts as body parts.
-            foreach(SnakeBodyPart snakeBodyPart in _snakeList)
+            // Mark all parts (including the old head) parts as body parts.
+            foreach (SnakeBodyPart snakeBodyPart in _snakeList)
             {
                 snakeBodyPart.IsHead = false;
                 ((Rectangle)snakeBodyPart.UiElement).Fill = _snakeBodyPartColour;
             }
 
-            // Expand the snake based on the current direction.
+            // Make a new head position based on the current snake direction.
             Point newPoint = _snakeList[_snakeList.Count - 1].Position;
 
             switch (_snakeDirection)
