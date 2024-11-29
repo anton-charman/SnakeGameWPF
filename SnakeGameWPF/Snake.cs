@@ -15,13 +15,13 @@ namespace SnakeGameWPF
         public SnakeDirection Direction { get; set; }
         public List<SnakeBodyPart> SnakeList { get; init; }
 
-        public Snake(int snakeLength, SnakeDirection direction, double row, double col)
+        public Snake(int snakeLength, SnakeDirection direction, double row, double col, double squareSize)
         {
             SnakeLength = snakeLength;
             Direction = direction;
             SnakeList = new List<SnakeBodyPart>() 
             { 
-                new SnakeBodyPart() { Position = new Point(row, col), IsHead = true } 
+                new SnakeBodyPart() { Position = new Point(row * squareSize, col * squareSize), IsHead = true } 
             };
         }
 

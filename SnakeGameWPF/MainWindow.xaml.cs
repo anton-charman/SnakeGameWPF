@@ -51,10 +51,9 @@ namespace SnakeGameWPF
         private void DoInitialisations()
         {
             _tileSize = MainArea.ActualWidth / _numSquares;
-            _snake = new Snake(_startLength, _startingDirection, _startRow * _tileSize, _startCol * _tileSize);
+            _snake = new Snake(_startLength, _startingDirection, _startRow, _startCol, _tileSize);
 
-            _apple = new Apple(_tileSize);
-            UpdateAppleCoord();
+            _apple = new Apple(_tileSize, _numSquares);
 
             _dispatchTimer.Interval = TimeSpan.FromMilliseconds(_startingInterval);
             _dispatchTimer.Tick += Timer_Tick;

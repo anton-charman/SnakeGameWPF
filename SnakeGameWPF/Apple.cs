@@ -17,7 +17,7 @@ namespace SnakeGameWPF
         public UIElement UiElement { get; init; }
         public Point Position { get; private set; }
 
-        public Apple(double squareSize) 
+        public Apple(double squareSize, int numSquares) 
         {
             UiElement = new Ellipse()
             {
@@ -25,6 +25,8 @@ namespace SnakeGameWPF
                 Height = squareSize,
                 Fill = _colour
             };
+
+            UpdatePosition(numSquares, squareSize);
         }
 
         public void UpdatePosition(int numSquares, double squareSize)
