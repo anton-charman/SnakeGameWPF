@@ -123,7 +123,6 @@ namespace SnakeGameWPF
                     break;
             }
 
-            // This bit makes the snake motion go out of sync with the timer.
             if (_snake.Direction != currDir)
             {
                 UpdateSnake();
@@ -218,8 +217,6 @@ namespace SnakeGameWPF
         {
             _score++;
 
-            // Issue: when the snake eats an apple the head skips the tile where
-            // the apple was and jumps ahead to the next tile.
             _snake.ExpandBody();
             UpdateSnake();
             DrawSnake();
