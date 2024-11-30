@@ -8,9 +8,9 @@ namespace SnakeGameWPF
 {
     public enum SnakeDirection
     {
-        Left,
-        Right,
         Up,
-        Down
+        Right,
+        Down,
+        Left
     };
 }
