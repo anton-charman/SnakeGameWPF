@@ -25,13 +25,26 @@ namespace SnakeGameWPF
                 Height = squareSize,
                 Fill = _colour
             };
-
-            UpdatePosition(numSquares, squareSize);
         }
 
-        public void UpdatePosition(int numSquares, double squareSize)
+        private void UpdatePosition(int numSquares, double squareSize)
         {
             Position = new Point(_rnd.Next(numSquares) * squareSize, _rnd.Next(numSquares) * squareSize);
+        }
+
+        /// <summary>
+        /// Get a new random apple coordinate unoccupied by the snake. 
+        /// </summary>
+        public void UpdateAppleCoord(int numSquares, double squareSize, List<SnakeBodyPart> list)
+        {
+            UpdatePosition(numSquares, squareSize);
+            foreach (SnakeBodyPart part in list)
+            {
+                if (part.Position == Position)
+                {
+                    UpdateAppleCoord(numSquares, squareSize, list);
+                }
+            }
         }
     }
 }
