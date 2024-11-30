@@ -99,7 +99,8 @@ namespace SnakeGameWPF
         /// <param name="key">User pressed key.</param>
         public void UpdateDirection(Key key)
         {
-            if (Direction != (SnakeDirection)(((int)_dir[key] + 2) % 4))
+            // Don't let the snake do a U-turn and don't update direction if it isn't different.
+            if (Direction != (SnakeDirection)(((int)_dir[key] + 2) % 4) && Direction != _dir[key])
                 Direction = _dir[key];
         }
 
