@@ -17,7 +17,7 @@ namespace SnakeGameWPF
         public UIElement UiElement { get; init; }
         public Point Position { get; private set; }
 
-        public Apple(double squareSize, int numSquares) 
+        public Apple(double squareSize) 
         {
             UiElement = new Ellipse()
             {
@@ -27,22 +27,18 @@ namespace SnakeGameWPF
             };
         }
 
-        private void UpdatePosition(int numSquares, double squareSize)
-        {
-            Position = new Point(_rnd.Next(numSquares) * squareSize, _rnd.Next(numSquares) * squareSize);
-        }
-
         /// <summary>
         /// Get a new random apple coordinate unoccupied by the snake. 
         /// </summary>
-        public void UpdateAppleCoord(int numSquares, double squareSize, List<SnakeBodyPart> list)
+        public void UpdateAppleCoord(int numSquares, double squareSize, List<Point> snakePosList)
         {
-            UpdatePosition(numSquares, squareSize);
-            foreach (SnakeBodyPart part in list)
+            Position = new Point(_rnd.Next(numSquares) * squareSize, _rnd.Next(numSquares) * squareSize);
+
+            foreach (Point pos in snakePosList)
             {
-                if (part.Position == Position)
+                if (pos == Position)
                 {
-                    UpdateAppleCoord(numSquares, squareSize, list);
+                    UpdateAppleCoord(numSquares, squareSize, snakePosList);
                 }
             }
         }

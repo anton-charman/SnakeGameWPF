@@ -66,5 +66,15 @@ namespace SnakeGameWPF
                 IsHead = true
             });
         }
+
+        public List<Point> GetSnakePartCoords()
+        {
+            List<Point> list = new List<Point>();
+            foreach(SnakeBodyPart part in SnakeList)
+            {
+                list.Add(part.Position);
+            }
+            return list;
+        }
     }
 }

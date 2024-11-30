@@ -41,7 +41,7 @@ namespace SnakeGameWPF
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             _tileSize = MainArea.ActualWidth / _numSquares;
-            _apple = new Apple(_tileSize, _numSquares);
+            _apple = new Apple(_tileSize);
 
             DrawMainArea();
         }
@@ -130,7 +130,7 @@ namespace SnakeGameWPF
 
             DoInitialisations();
             DrawSnake();
-            _apple.UpdateAppleCoord(_numSquares, _tileSize, _snake.SnakeList);
+            _apple.UpdateAppleCoord(_numSquares, _tileSize, _snake.GetSnakePartCoords());
             DrawApple();
 
             _dispatchTimer.Start(); // Kicks off the game.
