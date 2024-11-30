@@ -14,10 +14,19 @@ namespace SnakeGameWPF
         public int SnakeLength { get; private set; }
         public SnakeDirection Direction { get; private set; }
         public List<SnakeBodyPart> SnakeList { get; private set; }
+        private Dictionary<Key, SnakeDirection> _dir; 
 
         public Snake(int startLength, SnakeDirection direction, double row, double col, double squareSize)
         {
             SetUpSnake(startLength, direction, row, col, squareSize);
+
+            _dir = new Dictionary<Key, SnakeDirection>()
+            {
+                {Key.Up , SnakeDirection.Up},
+                {Key.Right , SnakeDirection.Right},
+                {Key.Down , SnakeDirection.Down},
+                {Key.Left , SnakeDirection.Left}
+            };
         }
 
         /// <summary>
@@ -90,33 +99,8 @@ namespace SnakeGameWPF
         /// <param name="key">User pressed key.</param>
         public void UpdateDirection(Key key)
         {
-            switch (key)
-            {
-                case Key.Up or Key.W:
-                    if (Direction != SnakeDirection.Down)
-                    {
-                        Direction = SnakeDirection.Up;
-                    }
-                    break;
-                case Key.Down or Key.S:
-                    if (Direction != SnakeDirection.Up)
-                    {
-                        Direction = SnakeDirection.Down;
-                    }
-                    break;
-                case Key.Left or Key.A:
-                    if (Direction != SnakeDirection.Right)
-                    {
-                        Direction = SnakeDirection.Left;
-                    }
-                    break;
-                case Key.Right or Key.D:
-                    if (Direction != SnakeDirection.Left)
-                    {
-                        Direction = SnakeDirection.Right;
-                    }
-                    break;
-            }
+            if (Direction != (SnakeDirection)(((int)_dir[key] + 2) % 4))
+                Direction = _dir[key];
         }
 
         /// <summary>
