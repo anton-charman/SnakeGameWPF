@@ -15,10 +15,8 @@ namespace SnakeGameWPF
     {
         // Grid parameters.
         private readonly int _numSquares = 20;
-        private double _tileSize;
         private readonly SolidColorBrush _evenColour = Brushes.LightGreen;
         private readonly SolidColorBrush _oddColour = Brushes.DarkGreen;
-        private bool _isGameActive = false;
         private int _score = 0;
         private int _multiplier = 100;
 
@@ -37,21 +35,25 @@ namespace SnakeGameWPF
         private readonly int _startingInterval = 1000;
         private readonly int _minimumInterval = 100;
 
+        public double TileSize => MainArea.ActualWidth / _numSquares;
+        private double Interval => Math.Max(_startingInterval - _score * _multiplier, _minimumInterval);
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
-        {
-            _tileSize = MainArea.ActualWidth / _numSquares;
-            _apple = new Apple(_tileSize);
+        { 
+            _snake = new Snake(_startLength, _startDirection, _startRow, _startCol, TileSize);
+            _apple = new Apple(TileSize);
 
-            _dispatchTimer.Interval = TimeSpan.FromMilliseconds(GetInterval());
+            _dispatchTimer.Interval = TimeSpan.FromMilliseconds(Interval);
             _dispatchTimer.Tick += Timer_Tick;
 
             DrawMainArea();
             UpdateTitle();
+            StartNewGame();
         }
 
         /// <summary>
@@ -66,13 +68,13 @@ namespace SnakeGameWPF
                 {
                     Rectangle rect = new Rectangle()
                     {
-                        Width = _tileSize,
-                        Height = _tileSize,
+                        Width = TileSize,
+                        Height = TileSize,
                         Fill = counter % 2 == 0 ? _evenColour : _oddColour
                     };
 
-                    Canvas.SetTop(rect, row * _tileSize);
-                    Canvas.SetLeft(rect, col * _tileSize);
+                    Canvas.SetTop(rect, row * TileSize);
+                    Canvas.SetLeft(rect, col * TileSize);
                     MainArea.Children.Add(rect);
 
                     counter++;
@@ -86,61 +88,28 @@ namespace SnakeGameWPF
             }
         }
 
+        private void UpdateTitle()
+        {
+            Title = $"Snake in WPF: Score = {_score}, Interval = {Interval} ms";
+        }
+
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Enter)
             {
+                ResetGame();
                 StartNewGame();
                 return;
             }
-                
-            SnakeDirection currDir = _snake.Direction;
-            switch (e.Key)
-            {
-                case Key.Up or Key.W:
-                    if (currDir != SnakeDirection.Down)
-                    {
-                        _snake.Direction = SnakeDirection.Up;
-                    }
-                    break;
-                case Key.Down or Key.S:
-                    if (currDir != SnakeDirection.Up)
-                    {
-                        _snake.Direction = SnakeDirection.Down;
-                    }
-                    break;
-                case Key.Left or Key.A:
-                    if (currDir != SnakeDirection.Right)
-                    {
-                        _snake.Direction = SnakeDirection.Left;
-                    }
-                    break;
-                case Key.Right or Key.D:
-                    if (currDir != SnakeDirection.Left)
-                    {
-                        _snake.Direction = SnakeDirection.Right;
-                    }
-                    break;
-            }
 
-            if (_snake.Direction != currDir)
+            SnakeDirection prevDir = _snake.Direction;
+            _snake.UpdateDirection(e.Key);
+
+            if (_snake.Direction != prevDir)
             {
                 UpdateSnake();
                 DrawSnake();
             }
-        }
-
-        private void StartNewGame()
-        {
-            if (_isGameActive)
-                ResetGame();
-
-            DoInitialisations();
-            DrawSnake();
-            _apple.UpdateAppleCoord(_numSquares, _snake.GetSnakePartCoords());
-            DrawApple();
-
-            _dispatchTimer.Start(); // Kicks off the game.
         }
 
         private void ResetGame()
@@ -154,30 +123,20 @@ namespace SnakeGameWPF
 
             MainArea.Children.Remove(_apple.UiElement);
 
-            _score = 0;
+            _snake.ResetSnake(_startLength, _startDirection, _startRow, _startCol, TileSize);
 
-            _isGameActive = false;
+            _score = 0;
 
             UpdateTitle();
         }
 
-        private void DoInitialisations()
+        private void StartNewGame()
         {
-            _snake = new Snake(_startLength, _startDirection, _startRow, _startCol, _tileSize);
-
-            _isGameActive = true;
-        }
-
-        private double GetInterval() => Math.Max(_startingInterval - _score * _multiplier, _minimumInterval);
-
-        /// <summary>
-        /// Event handler for the dispatch timer tick event.
-        /// </summary>
-        private void Timer_Tick(object? sender, EventArgs e)
-        {
-            UpdateSnake();
             DrawSnake();
-            DoCollisionCheck();
+            _apple.UpdateAppleCoord(_numSquares, _snake.GetSnakePartCoords());
+            DrawApple();
+
+            _dispatchTimer.Start(); // Kicks off the game.
         }
 
         /// <summary>
@@ -189,13 +148,49 @@ namespace SnakeGameWPF
             {
                 if (snakeBodyPart.UiElement == null)
                 {
-                    snakeBodyPart.UpdateUIElement(_tileSize);
+                    snakeBodyPart.UpdateUIElement(TileSize);
                     
                     Canvas.SetTop(snakeBodyPart.UiElement, snakeBodyPart.Position.Y);
                     Canvas.SetLeft(snakeBodyPart.UiElement, snakeBodyPart.Position.X);
                     MainArea.Children.Add(snakeBodyPart.UiElement);
                 }
             }
+        }
+
+        /// <summary>
+        /// Places the apple on the canvas.
+        /// </summary>
+        private void DrawApple()
+        {
+            Canvas.SetTop(_apple.UiElement, _apple.Position.Y);
+            Canvas.SetLeft(_apple.UiElement, _apple.Position.X);
+            MainArea.Children.Add(_apple.UiElement);
+        }
+
+        /// <summary>
+        /// Updates the list of snake parts from the movement direction. 
+        /// </summary>
+        private void UpdateSnake()
+        {
+            // Remove the current tail of the snake. Defined as the first element.
+            while (_snake.SnakeList.Count >= _snake.SnakeLength)
+            {
+                MainArea.Children.Remove(_snake.SnakeList[0].UiElement);
+                _snake.SnakeList.RemoveAt(0);
+            }
+
+            _snake.SetToBodyParts();
+            _snake.UpdateHead(TileSize);
+        }
+
+        /// <summary>
+        /// Event handler for the dispatch timer tick event.
+        /// </summary>
+        private void Timer_Tick(object? sender, EventArgs e)
+        {
+            UpdateSnake();
+            DrawSnake();
+            DoCollisionCheck();
         }
 
         private void DoCollisionCheck()
@@ -225,7 +220,7 @@ namespace SnakeGameWPF
             _apple.UpdateAppleCoord(_numSquares, _snake.GetSnakePartCoords());
             DrawApple();
 
-            _dispatchTimer.Interval = TimeSpan.FromMilliseconds(GetInterval());
+            _dispatchTimer.Interval = TimeSpan.FromMilliseconds(Interval);
 
             UpdateTitle();
         }
@@ -240,37 +235,6 @@ namespace SnakeGameWPF
         {
             MessageBox.Show("Game over. Play again?");
             ResetGame();
-        }
-
-        /// <summary>
-        /// Places the apple on the canvas.
-        /// </summary>
-        private void DrawApple()
-        {
-            Canvas.SetTop(_apple.UiElement, _apple.Position.Y);
-            Canvas.SetLeft(_apple.UiElement, _apple.Position.X);
-            MainArea.Children.Add(_apple.UiElement);
-        }
-
-        /// <summary>
-        /// Updates the list of snake parts from the movement direction. 
-        /// </summary>
-        private void UpdateSnake()
-        {
-            // Remove the current tail of the snake. Defined as the first element.
-            while (_snake.SnakeList.Count >= _snake.SnakeLength)
-            {
-                MainArea.Children.Remove(_snake.SnakeList[0].UiElement);
-                _snake.SnakeList.RemoveAt(0);
-            }
-
-            _snake.SetToBodyParts();
-            _snake.GetNewHead(_tileSize);
-        }
-
-        private void UpdateTitle()
-        {
-            Title = $"Snake in WPF: Score = {_score}, Interval = {GetInterval()} ms";
         }
     }
 }

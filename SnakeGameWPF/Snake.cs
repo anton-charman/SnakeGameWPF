@@ -5,23 +5,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Input;
 
 namespace SnakeGameWPF
 {
     public class Snake
     {
         public int SnakeLength { get; private set; }
-        public SnakeDirection Direction { get; set; }
-        public List<SnakeBodyPart> SnakeList { get; init; }
+        public SnakeDirection Direction { get; private set; }
+        public List<SnakeBodyPart> SnakeList { get; private set; }
 
         public Snake(int startLength, SnakeDirection direction, double row, double col, double squareSize)
         {
+            SetUpSnake(startLength, direction, row, col, squareSize);
+        }
+
+        private void SetUpSnake(int startLength, SnakeDirection direction, double row, double col, double squareSize)
+        {
             SnakeLength = startLength;
             Direction = direction;
-            SnakeList = new List<SnakeBodyPart>() 
-            { 
-                new SnakeBodyPart() { Position = new Point(row * squareSize, col * squareSize), IsHead = true } 
+            SnakeList = new List<SnakeBodyPart>()
+            {
+                new SnakeBodyPart() { Position = new Point(row * squareSize, col * squareSize), IsHead = true }
             };
+        }
+
+        public void ResetSnake(int startLength, SnakeDirection direction, double row, double col, double squareSize)
+        {
+            SnakeList.Clear();
+            SetUpSnake(startLength, direction, row, col, squareSize);
         }
 
         /// <summary>
@@ -36,9 +48,9 @@ namespace SnakeGameWPF
         }
         
         /// <summary>
-        /// Make a new head position based on the current snake direction.
+        /// Update the head position based on the current snake direction.
         /// </summary>
-        public void GetNewHead(double squareSize)
+        public void UpdateHead(double squareSize)
         {
             Point newPoint = SnakeList[SnakeList.Count - 1].Position;
 
@@ -64,6 +76,37 @@ namespace SnakeGameWPF
                 Position = newPoint,
                 IsHead = true
             });
+        }
+
+        public void UpdateDirection(Key key)
+        {
+            switch (key)
+            {
+                case Key.Up or Key.W:
+                    if (Direction != SnakeDirection.Down)
+                    {
+                        Direction = SnakeDirection.Up;
+                    }
+                    break;
+                case Key.Down or Key.S:
+                    if (Direction != SnakeDirection.Up)
+                    {
+                        Direction = SnakeDirection.Down;
+                    }
+                    break;
+                case Key.Left or Key.A:
+                    if (Direction != SnakeDirection.Right)
+                    {
+                        Direction = SnakeDirection.Left;
+                    }
+                    break;
+                case Key.Right or Key.D:
+                    if (Direction != SnakeDirection.Left)
+                    {
+                        Direction = SnakeDirection.Right;
+                    }
+                    break;
+            }
         }
 
         public List<Point> GetSnakePartCoords()
