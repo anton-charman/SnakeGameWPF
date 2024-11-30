@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -18,12 +19,14 @@ namespace SnakeGameWPF
         private readonly SolidColorBrush _evenColour = Brushes.LightGreen;
         private readonly SolidColorBrush _oddColour = Brushes.DarkGreen;
         private bool _isGameActive = false;
+        private int _score = 0;
+        private int _multiplier = 100;
 
         // Snake parameters.
         private readonly int _startRow = 10;
         private readonly int _startCol = 10;
-        private readonly int _startLength = 2;
-        private readonly SnakeDirection _startingDirection = SnakeDirection.Right;
+        private int _startLength = 2;
+        private readonly SnakeDirection _startDirection = SnakeDirection.Right;
         private Snake _snake;
 
         // Apple parameters.
@@ -32,6 +35,7 @@ namespace SnakeGameWPF
         // Dispatch timer parameters.
         private readonly DispatcherTimer _dispatchTimer = new DispatcherTimer();
         private readonly int _startingInterval = 1000;
+        private readonly int _minimumInterval = 100;
 
         public MainWindow()
         {
@@ -43,7 +47,11 @@ namespace SnakeGameWPF
             _tileSize = MainArea.ActualWidth / _numSquares;
             _apple = new Apple(_tileSize);
 
+            _dispatchTimer.Interval = TimeSpan.FromMilliseconds(GetInterval());
+            _dispatchTimer.Tick += Timer_Tick;
+
             DrawMainArea();
+            UpdateTitle();
         }
 
         /// <summary>
@@ -139,7 +147,6 @@ namespace SnakeGameWPF
         private void ResetGame()
         {
             _dispatchTimer.Stop();
-            _dispatchTimer.Tick -= Timer_Tick;
 
             foreach (SnakeBodyPart part in _snake.SnakeList)
             {
@@ -147,19 +154,22 @@ namespace SnakeGameWPF
             }
 
             MainArea.Children.Remove(_apple.UiElement);
+
+            _score = 0;
+
+            _isGameActive = false;
+
+            UpdateTitle();
         }
 
-        /// <summary>
-        /// Initialises the snake, apple and dispatch timer.
-        /// </summary>
         private void DoInitialisations()
         {
-            _isGameActive = true;
-            _snake = new Snake(_startLength, _startingDirection, _startRow, _startCol, _tileSize);
+            _snake = new Snake(_startLength, _startDirection, _startRow, _startCol, _tileSize);
 
-            _dispatchTimer.Interval = TimeSpan.FromMilliseconds(_startingInterval);
-            _dispatchTimer.Tick += Timer_Tick;
+            _isGameActive = true;
         }
+
+        private double GetInterval() => Math.Max(_startingInterval - _score * _multiplier, _minimumInterval);
 
         /// <summary>
         /// Event handler for the dispatch timer tick event.
@@ -168,7 +178,7 @@ namespace SnakeGameWPF
         {
             UpdateSnake();
             DrawSnake();
-            //DoCollisionCheck();
+            DoCollisionCheck();
         }
 
         /// <summary>
@@ -187,6 +197,52 @@ namespace SnakeGameWPF
                     MainArea.Children.Add(snakeBodyPart.UiElement);
                 }
             }
+        }
+
+        private void DoCollisionCheck()
+        {
+            if (_snake.SnakeList[^1].Position == _apple.Position)
+            {
+                EatApple();
+                return;
+            }
+
+            if (GetIsBoundary())
+                EndGame();
+
+            if (_snake.GetIsBodyCollision())
+                EndGame();
+        }
+
+        private void EatApple()
+        {
+            _score++;
+
+            // Issue: when the snake eats an apple the head skips the tile where
+            // the apple was and jumps ahead to the next tile.
+            _snake.ExpandBody();
+            UpdateSnake();
+            DrawSnake();
+
+            MainArea.Children.Remove(_apple.UiElement);
+            _apple.UpdateAppleCoord(_numSquares, _snake.GetSnakePartCoords());
+            DrawApple();
+
+            _dispatchTimer.Interval = TimeSpan.FromMilliseconds(GetInterval());
+
+            UpdateTitle();
+        }
+
+        private bool GetIsBoundary() => 
+            _snake.SnakeList[^1].Position.X < 0 || 
+            _snake.SnakeList[^1].Position.X >= MainArea.ActualWidth || 
+            _snake.SnakeList[^1].Position.Y < 0 || 
+            _snake.SnakeList[^1].Position.Y >= MainArea.ActualHeight;
+
+        private void EndGame()
+        {
+            MessageBox.Show("Game over. Play again?");
+            ResetGame();
         }
 
         /// <summary>
@@ -213,6 +269,11 @@ namespace SnakeGameWPF
 
             _snake.SetToBodyParts();
             _snake.GetNewHead(_tileSize);
+        }
+
+        private void UpdateTitle()
+        {
+            Title = $"Snake in WPF: Score = {_score}, Interval = {GetInterval()} ms";
         }
     }
 }

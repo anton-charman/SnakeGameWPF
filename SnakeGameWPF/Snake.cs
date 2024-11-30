@@ -10,14 +10,13 @@ namespace SnakeGameWPF
 {
     public class Snake
     {
-        //private readonly int _speedThreshold = 100;
         public int SnakeLength { get; private set; }
         public SnakeDirection Direction { get; set; }
         public List<SnakeBodyPart> SnakeList { get; init; }
 
-        public Snake(int snakeLength, SnakeDirection direction, double row, double col, double squareSize)
+        public Snake(int startLength, SnakeDirection direction, double row, double col, double squareSize)
         {
-            SnakeLength = snakeLength;
+            SnakeLength = startLength;
             Direction = direction;
             SnakeList = new List<SnakeBodyPart>() 
             { 
@@ -75,6 +74,24 @@ namespace SnakeGameWPF
                 list.Add(part.Position);
             }
             return list;
+        }
+
+        public bool GetIsBodyCollision()
+        {
+            for (int i = 0; i < SnakeList.Count - 1; i++)
+            {
+                if (SnakeList[^1].Position == SnakeList[i].Position)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void ExpandBody()
+        {
+            SnakeLength++;
+            SnakeList.Insert(0, new SnakeBodyPart() { Position = SnakeList[0].Position, IsHead = false });
         }
     }
 }
