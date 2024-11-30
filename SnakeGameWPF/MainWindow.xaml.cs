@@ -43,6 +43,9 @@ namespace SnakeGameWPF
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Event handler for the window content being rendered.
+        /// </summary>
         private void Window_ContentRendered(object sender, EventArgs e)
         { 
             _snake = new Snake(_startLength, _startDirection, _startRow, _startCol, TileSize);
@@ -52,7 +55,6 @@ namespace SnakeGameWPF
             _dispatchTimer.Tick += Timer_Tick;
 
             DrawMainArea();
-            UpdateTitle();
             StartNewGame();
         }
 
@@ -88,11 +90,9 @@ namespace SnakeGameWPF
             }
         }
 
-        private void UpdateTitle()
-        {
-            Title = $"Snake in WPF: Score = {_score}, Interval = {Interval} ms";
-        }
-
+        /// <summary>
+        /// Event handler for user keystrokes.
+        /// </summary>
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Enter)
@@ -112,6 +112,9 @@ namespace SnakeGameWPF
             }
         }
 
+        /// <summary>
+        /// Clear the screen of the snake and apple and reset the score.
+        /// </summary>
         private void ResetGame()
         {
             _dispatchTimer.Stop();
@@ -126,17 +129,24 @@ namespace SnakeGameWPF
             _snake.ResetSnake(_startLength, _startDirection, _startRow, _startCol, TileSize);
 
             _score = 0;
-
-            UpdateTitle();
         }
 
+        /// <summary>
+        /// Put the snake and apple onto the screen and kick off the game timer.
+        /// </summary>
         private void StartNewGame()
         {
+            UpdateTitle();
             DrawSnake();
             _apple.UpdateAppleCoord(_numSquares, _snake.GetSnakePartCoords());
             DrawApple();
 
-            _dispatchTimer.Start(); // Kicks off the game.
+            _dispatchTimer.Start(); 
+        }
+
+        private void UpdateTitle()
+        {
+            Title = $"Snake in WPF: Score = {_score}, Interval = {Interval} ms";
         }
 
         /// <summary>
@@ -193,6 +203,9 @@ namespace SnakeGameWPF
             DoCollisionCheck();
         }
 
+        /// <summary>
+        /// Checks if the snake head hits an apple, the walls or its body.
+        /// </summary>
         private void DoCollisionCheck()
         {
             if (_snake.SnakeList[^1].Position == _apple.Position)
@@ -208,6 +221,9 @@ namespace SnakeGameWPF
                 EndGame();
         }
 
+        /// <summary>
+        /// Expands the snake, moves the apple, increases the score and speeds the game up.
+        /// </summary>
         private void EatApple()
         {
             _score++;
@@ -225,12 +241,18 @@ namespace SnakeGameWPF
             UpdateTitle();
         }
 
+        /// <summary>
+        /// Snake-boundary interaction logic.
+        /// </summary>
         private bool GetIsBoundary() => 
             _snake.SnakeList[^1].Position.X < 0 || 
             _snake.SnakeList[^1].Position.X >= MainArea.ActualWidth || 
             _snake.SnakeList[^1].Position.Y < 0 || 
             _snake.SnakeList[^1].Position.Y >= MainArea.ActualHeight;
 
+        /// <summary>
+        /// Game closure and cleanup logic.
+        /// </summary>
         private void EndGame()
         {
             MessageBox.Show("Game over. Play again?");

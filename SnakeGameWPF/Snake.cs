@@ -20,6 +20,9 @@ namespace SnakeGameWPF
             SetUpSnake(startLength, direction, row, col, squareSize);
         }
 
+        /// <summary>
+        /// Sets up the snake's initial state.
+        /// </summary>
         private void SetUpSnake(int startLength, SnakeDirection direction, double row, double col, double squareSize)
         {
             SnakeLength = startLength;
@@ -30,6 +33,9 @@ namespace SnakeGameWPF
             };
         }
 
+        /// <summary>
+        /// Clears and re-initialises the snake instance's parameters.
+        /// </summary>
         public void ResetSnake(int startLength, SnakeDirection direction, double row, double col, double squareSize)
         {
             SnakeList.Clear();
@@ -78,6 +84,10 @@ namespace SnakeGameWPF
             });
         }
 
+        /// <summary>
+        /// Gets the new snake direction from user keystrokes.
+        /// </summary>
+        /// <param name="key">User pressed key.</param>
         public void UpdateDirection(Key key)
         {
             switch (key)
@@ -109,6 +119,9 @@ namespace SnakeGameWPF
             }
         }
 
+        /// <summary>
+        /// Returns a list of the positions of the snake body parts.
+        /// </summary>
         public List<Point> GetSnakePartCoords()
         {
             List<Point> list = new List<Point>();
@@ -119,6 +132,9 @@ namespace SnakeGameWPF
             return list;
         }
 
+        /// <summary>
+        /// Checks if the snake head collides with its own body.
+        /// </summary>
         public bool GetIsBodyCollision()
         {
             for (int i = 0; i < SnakeList.Count - 1; i++)
@@ -131,6 +147,9 @@ namespace SnakeGameWPF
             return false;
         }
 
+        /// <summary>
+        /// Add a new tail when an apple is eaten.
+        /// </summary>
         public void ExpandBody()
         {
             SnakeLength++;
