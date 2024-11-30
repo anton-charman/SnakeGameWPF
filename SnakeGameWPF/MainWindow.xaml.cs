@@ -130,7 +130,7 @@ namespace SnakeGameWPF
 
             DoInitialisations();
             DrawSnake();
-            _apple.UpdateAppleCoord(_numSquares, _tileSize, _snake.GetSnakePartCoords());
+            _apple.UpdateAppleCoord(_numSquares, _snake.GetSnakePartCoords());
             DrawApple();
 
             _dispatchTimer.Start(); // Kicks off the game.

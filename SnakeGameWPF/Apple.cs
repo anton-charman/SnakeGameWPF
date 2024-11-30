@@ -30,15 +30,19 @@ namespace SnakeGameWPF
         /// <summary>
         /// Get a new random apple coordinate unoccupied by the snake. 
         /// </summary>
-        public void UpdateAppleCoord(int numSquares, double squareSize, List<Point> snakePosList)
+        public void UpdateAppleCoord(int numSquares, List<Point> snakePosList)
         {
-            Position = new Point(_rnd.Next(numSquares) * squareSize, _rnd.Next(numSquares) * squareSize);
-
+            Position = new Point
+            (
+                _rnd.Next(numSquares) * ((Ellipse)UiElement).Width, 
+                _rnd.Next(numSquares) * ((Ellipse)UiElement).Height
+            );
+            
             foreach (Point pos in snakePosList)
             {
                 if (pos == Position)
                 {
-                    UpdateAppleCoord(numSquares, squareSize, snakePosList);
+                    UpdateAppleCoord(numSquares, snakePosList);
                 }
             }
         }
