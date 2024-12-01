@@ -55,7 +55,6 @@ namespace SnakeGameWPF
             _dispatchTimer.Tick += Timer_Tick;
 
             DrawMainArea();
-            StartNewGame();
         }
 
         /// <summary>
@@ -130,6 +129,9 @@ namespace SnakeGameWPF
 
             _score = 0;
             _dispatchTimer.Interval = TimeSpan.FromMilliseconds(Interval);
+
+            borderWelcome.Visibility = Visibility.Collapsed;
+            borderUserDied.Visibility = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -260,8 +262,9 @@ namespace SnakeGameWPF
         /// </summary>
         private void EndGame()
         {
-            MessageBox.Show("Game over. Play again?");
-            ResetGame();
+            _dispatchTimer.Stop();
+            textBlockFinalScore.Text = _score.ToString();
+            borderUserDied.Visibility = Visibility.Visible;
         }
 
         /// <summary>
