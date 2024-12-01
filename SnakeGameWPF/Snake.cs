@@ -133,12 +133,8 @@ namespace SnakeGameWPF
         }
 
         /// <summary>
-        /// Add a new tail when an apple is eaten.
+        /// Increase the snake length property when an apple is eaten.
         /// </summary>
-        public void ExpandBody()
-        {
-            SnakeLength++;
-            SnakeList.Insert(0, new SnakeBodyPart() { Position = SnakeList[0].Position, IsHead = false });
-        }
+        public void ExpandBody() => SnakeLength++;
     }
 }

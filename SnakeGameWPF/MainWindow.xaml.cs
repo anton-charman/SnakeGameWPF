@@ -234,16 +234,13 @@ namespace SnakeGameWPF
         private void EatApple()
         {
             _score++;
+            _dispatchTimer.Interval = TimeSpan.FromMilliseconds(Interval);
 
             _snake.ExpandBody();
-            UpdateSnake();
-            DrawSnake();
 
             MainArea.Children.Remove(_apple.UiElement);
             _apple.UpdateAppleCoord(_numSquares, _snake.GetSnakePartCoords());
             DrawApple();
-
-            _dispatchTimer.Interval = TimeSpan.FromMilliseconds(Interval);
 
             UpdateTitle();
         }
