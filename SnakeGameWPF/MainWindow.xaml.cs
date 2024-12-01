@@ -104,10 +104,14 @@ namespace SnakeGameWPF
             SnakeDirection prevDir = _snake.Direction;
             _snake.UpdateDirection(e.Key);
 
+            // I don't like this block of code.
+            // It draws the snake before the timer ticks.
+            // This allows the user to speed up the snake movement speed by changing direction.
             if (_snake.Direction != prevDir)
             {
                 UpdateSnake();
                 DrawSnake();
+                DoCollisionCheck();
             }
         }
 
