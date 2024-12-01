@@ -5,13 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SnakeGameWPF"
         mc:Ignorable="d"
-        Title="Snake in WPF" 
         SizeToContent="WidthAndHeight" 
         ContentRendered="Window_ContentRendered"
-        KeyUp="Window_KeyUp">
-    <Border BorderBrush="Black" BorderThickness="5">
-        <Canvas Name="MainArea" ClipToBounds="True" Width="400" Height="400">
-            
-        </Canvas>
-    </Border>
+        KeyUp="Window_KeyUp"
+        MouseDown="Window_MouseDown"
+        ResizeMode="NoResize"
+        WindowStyle="None">
+    <DockPanel Background="Black">
+        <Grid DockPanel.Dock="Top" Name="titleBar">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontFamily" Value="Consolas"/>
+                    <Setter Property="FontSize" Value="24"/>
+                    <Setter Property="Foreground" Value="Green"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Style>
+            </Grid.Resources>
+            <WrapPanel Grid.Column="0" Margin="10,0,0,0">
+                <TextBlock Text="Score:"/>
+                <TextBlock Name="textBlockScore" Text="0"/>
+            </WrapPanel>
+            <WrapPanel Grid.Column="1" >
+                <TextBlock Text="Interval (ms):"/>
+                <TextBlock Name="textBlockInterval" Text="0"/>
+            </WrapPanel>
+            <Button Grid.Column="2" DockPanel.Dock="Right" Background="Transparent" Foreground="Green" FontWeight="Bold" FontSize="20" BorderThickness="0" Padding="10,0" Name="buttonClose" Click="ButtonClose_Click">X</Button>
+        </Grid>
+        <Border DockPanel.Dock="Bottom" BorderBrush="Black" BorderThickness="5">
+            <Canvas Name="MainArea" ClipToBounds="True" Width="400" Height="400"/>
+        </Border>
+    </DockPanel>
 </Window>

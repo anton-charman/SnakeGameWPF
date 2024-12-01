@@ -129,6 +129,7 @@ namespace SnakeGameWPF
             _snake.ResetSnake(_startLength, _startDirection, _startRow, _startCol, TileSize);
 
             _score = 0;
+            _dispatchTimer.Interval = TimeSpan.FromMilliseconds(Interval);
         }
 
         /// <summary>
@@ -144,9 +145,13 @@ namespace SnakeGameWPF
             _dispatchTimer.Start(); 
         }
 
+        /// <summary>
+        /// Update the main window's score and interval textblock controls.
+        /// </summary>
         private void UpdateTitle()
         {
-            Title = $"Snake in WPF: Score = {_score}, Interval = {Interval} ms";
+            textBlockScore.Text = _score.ToString();
+            textBlockInterval.Text = Interval.ToString();
         }
 
         /// <summary>
@@ -257,6 +262,22 @@ namespace SnakeGameWPF
         {
             MessageBox.Show("Game over. Play again?");
             ResetGame();
+        }
+
+        /// <summary>
+        /// Enables the window to be dragged by clicking anywhere.
+        /// </summary>
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        /// <summary>
+        /// Closes the game when our custom 'X' button is pressed.
+        /// </summary>
+        private void ButtonClose_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
