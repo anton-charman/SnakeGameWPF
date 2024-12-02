@@ -29,7 +29,8 @@ Here's a selection of items that I intend to implement next:
 * Give the snake a snake-looking head that changes orientation with the snake motion.
 * Make the apple actual apple pixel art and not just a red circle.
 * Increase the granularity of the tiles to make motion smoother.
+* Give users WPF controls to configure the game parameters (dimensions, colours and speeds).
 
-Do get in contact if you have some feature requests or suggested improvements. Have a great day :)
+Do get in contact if you have feature requests or suggested improvements. Have a great day :)
 
 
