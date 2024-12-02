@@ -22,7 +22,7 @@ Here's an in-game screenshot (can you beat my score?...):
 ![MidGame](https://github.com/user-attachments/assets/56557876-2bf7-45ea-af5e-b44a5bdd19e2)
 
 ## Installation instructions
-Download the code from GitHub here, run it in Visual Studio and enjoy the game.
+Download the code from GitHub here, build it and enjoy the game.
 
 ## Issues and improvements
 Here's a selection of items that I intend to implement next:
