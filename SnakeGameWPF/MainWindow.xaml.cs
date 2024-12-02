@@ -18,7 +18,7 @@ namespace SnakeGameWPF
         private readonly SolidColorBrush _evenColour = Brushes.LightGreen;
         private readonly SolidColorBrush _oddColour = Brushes.DarkGreen;
         private int _score = 0;
-        private int _multiplier = 100;
+        private int _multiplier = 50;
 
         // Snake parameters.
         private readonly int _startRow = 10;
@@ -32,7 +32,7 @@ namespace SnakeGameWPF
 
         // Dispatch timer parameters.
         private readonly DispatcherTimer _dispatchTimer = new DispatcherTimer();
-        private readonly int _startingInterval = 1000;
+        private readonly int _startingInterval = 400;
         private readonly int _minimumInterval = 100;
 
         public double TileSize => MainArea.ActualWidth / _numSquares;
