@@ -1,9 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace SnakeGameWPF
@@ -15,8 +12,6 @@ namespace SnakeGameWPF
     {
         // Grid parameters.
         private readonly int _numSquares = 20;
-        private readonly SolidColorBrush _evenColour = Brushes.LightGreen;
-        private readonly SolidColorBrush _oddColour = Brushes.DarkGreen;
         private int _score = 0;
         private int _multiplier = 50;
 
@@ -67,16 +62,11 @@ namespace SnakeGameWPF
             {
                 for (int col = 0; col < _numSquares; col++)
                 {
-                    Rectangle rect = new Rectangle()
-                    {
-                        Width = TileSize,
-                        Height = TileSize,
-                        Fill = counter % 2 == 0 ? _evenColour : _oddColour
-                    };
-
-                    Canvas.SetTop(rect, row * TileSize);
-                    Canvas.SetLeft(rect, col * TileSize);
-                    MainArea.Children.Add(rect);
+                    Tile tile = new Tile(TileSize, counter);
+                    
+                    Canvas.SetTop(tile.UiElement, row * TileSize);
+                    Canvas.SetLeft(tile.UiElement, col * TileSize);
+                    MainArea.Children.Add(tile.UiElement);
 
                     counter++;
                 }
