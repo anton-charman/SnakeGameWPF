@@ -4,11 +4,12 @@ using System.Windows.Shapes;
 
 namespace SnakeGameWPF
 {
-    public class SnakeBodyPart
+    public class SnakeBodyPart : IElement
     {
         private SolidColorBrush _snakeHeadColour = Brushes.Black;
-        private SolidColorBrush _snakeBodyPartColour = Brushes.Gray;
+        private SolidColorBrush _colour = Brushes.Gray;
 
+        public SolidColorBrush Colour => IsHead ? _snakeHeadColour : _colour; 
         public UIElement UiElement { get; private set; }
         public Point Position { get; set; }
         public bool IsHead { get; set; }
@@ -19,14 +20,14 @@ namespace SnakeGameWPF
             {
                 Width = squareSize,
                 Height = squareSize,
-                Fill = IsHead ? _snakeHeadColour : _snakeBodyPartColour
+                Fill = Colour
             };
         }
 
         public void SetToBodyPart()
         {
             IsHead = false;
-            ((Rectangle) UiElement).Fill = _snakeBodyPartColour;
+            ((Rectangle) UiElement).Fill = _colour;
         }
     }
 }
