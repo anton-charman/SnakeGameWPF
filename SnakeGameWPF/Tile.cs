@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.Metrics;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Shapes;
+﻿using System.Windows.Media;
 
 namespace SnakeGameWPF
 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
+﻿using System.Windows;
 using System.Windows.Input;
 
 namespace SnakeGameWPF
@@ -13,20 +7,18 @@ namespace SnakeGameWPF
     {
         public int SnakeLength { get; private set; }
         public SnakeDirection Direction { get; private set; }
-        public List<SnakeBodyPart> SnakeList { get; private set; }
-        private Dictionary<Key, SnakeDirection> _dir; 
+        public List<BaseElement> SnakeList { get; private set; }
+        private Dictionary<Key, SnakeDirection> _dir = new Dictionary<Key, SnakeDirection>()
+        {
+            {Key.Up , SnakeDirection.Up},
+            {Key.Right , SnakeDirection.Right},
+            {Key.Down , SnakeDirection.Down},
+            {Key.Left , SnakeDirection.Left}
+        };
 
         public Snake(int startLength, SnakeDirection direction, double row, double col, double squareSize)
         {
             SetUpSnake(startLength, direction, row, col, squareSize);
-
-            _dir = new Dictionary<Key, SnakeDirection>()
-            {
-                {Key.Up , SnakeDirection.Up},
-                {Key.Right , SnakeDirection.Right},
-                {Key.Down , SnakeDirection.Down},
-                {Key.Left , SnakeDirection.Left}
-            };
         }
 
         /// <summary>
@@ -36,9 +28,9 @@ namespace SnakeGameWPF
         {
             SnakeLength = startLength;
             Direction = direction;
-            SnakeList = new List<SnakeBodyPart>()
+            SnakeList = new List<BaseElement>()
             {
-                new SnakeBodyPart() { Position = new Point(row * squareSize, col * squareSize), IsHead = true }
+                new SnakeHead() { Position = new Point(row * squareSize, col * squareSize) }
             };
         }
 
@@ -56,10 +48,8 @@ namespace SnakeGameWPF
         /// </summary>
         public void SetToBodyParts()
         {
-            foreach (SnakeBodyPart snakeBodyPart in SnakeList)
-            {
-                snakeBodyPart.SetToBodyPart();
-            }
+            SnakeList[0] = new SnakeTail() { Position = SnakeList[0].Position };
+            SnakeList[^1] = new SnakeBodyPart() { Position = SnakeList[^1].Position };
         }
         
         /// <summary>
@@ -86,11 +76,7 @@ namespace SnakeGameWPF
             }
 
             // Add the new head. Defined as the last element.
-            SnakeList.Add(new SnakeBodyPart()
-            {
-                Position = newPoint,
-                IsHead = true
-            });
+            SnakeList.Add(new SnakeHead() { Position = newPoint });
         }
 
         /// <summary>
@@ -110,7 +96,7 @@ namespace SnakeGameWPF
         public List<Point> GetSnakePartCoords()
         {
             List<Point> list = new List<Point>();
-            foreach(SnakeBodyPart part in SnakeList)
+            foreach(BaseElement part in SnakeList)
             {
                 list.Add(part.Position);
             }

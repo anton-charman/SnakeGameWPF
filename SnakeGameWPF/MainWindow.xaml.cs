@@ -112,7 +112,7 @@ namespace SnakeGameWPF
         {
             _dispatchTimer.Stop();
 
-            foreach (SnakeBodyPart part in _snake.SnakeList)
+            foreach (BaseElement part in _snake.SnakeList)
             {
                 MainArea.Children.Remove(part.UiElement);
             }
@@ -155,7 +155,7 @@ namespace SnakeGameWPF
         /// </summary>
         private void DrawSnake()
         {
-            foreach (SnakeBodyPart snakeBodyPart in _snake.SnakeList)
+            foreach (BaseElement snakeBodyPart in _snake.SnakeList)
             {
                 if (!MainArea.Children.Contains(snakeBodyPart.UiElement))
                 {
@@ -190,6 +190,8 @@ namespace SnakeGameWPF
                 _snake.SnakeList.RemoveAt(0);
             }
 
+            MainArea.Children.Remove(_snake.SnakeList[0].UiElement);
+            MainArea.Children.Remove(_snake.SnakeList[^1].UiElement);
             _snake.SetToBodyParts();
             _snake.UpdateHead(TileSize);
         }
