@@ -9,27 +9,16 @@ using System.Windows.Shapes;
 
 namespace SnakeGameWPF
 {
-    public class Apple : IElement
+    public class Apple : BaseElement
     {
         private Random _rnd = new Random();
 
-        public SolidColorBrush Colour => Brushes.Red;
-        public UIElement UiElement { get; private set; }
-        public Point Position { get; private set; }
+        public override SolidColorBrush Colour => Brushes.Red;
+        public override UIElement UiElement { get; set; } = new Ellipse();
 
         public Apple(double squareSize) 
         {
             UpdateUIElement(squareSize);
-        }
-
-        public void UpdateUIElement(double squareSize)
-        {
-            UiElement = new Ellipse()
-            {
-                Width = squareSize,
-                Height = squareSize,
-                Fill = Colour
-            };
         }
 
         /// <summary>
@@ -39,8 +28,8 @@ namespace SnakeGameWPF
         {
             Position = new Point
             (
-                _rnd.Next(numSquares) * ((Ellipse)UiElement).Width, 
-                _rnd.Next(numSquares) * ((Ellipse)UiElement).Height
+                _rnd.Next(numSquares) * (double)UiElement.GetValue(Shape.WidthProperty), 
+                _rnd.Next(numSquares) * (double)UiElement.GetValue(Shape.HeightProperty)
             );
             
             foreach (Point pos in snakePosList)

@@ -157,14 +157,14 @@ namespace SnakeGameWPF
         {
             foreach (SnakeBodyPart snakeBodyPart in _snake.SnakeList)
             {
-                if (snakeBodyPart.UiElement == null)
+                if (!MainArea.Children.Contains(snakeBodyPart.UiElement))
                 {
                     snakeBodyPart.UpdateUIElement(TileSize);
-                    
+
                     Canvas.SetTop(snakeBodyPart.UiElement, snakeBodyPart.Position.Y);
                     Canvas.SetLeft(snakeBodyPart.UiElement, snakeBodyPart.Position.X);
                     MainArea.Children.Add(snakeBodyPart.UiElement);
-                }
+                }   
             }
         }
 

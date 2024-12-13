@@ -1,33 +1,20 @@
-﻿using System.Windows;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace SnakeGameWPF
 {
-    public class SnakeBodyPart : IElement
+    public class SnakeBodyPart : BaseElement
     {
         private SolidColorBrush _snakeHeadColour = Brushes.Black;
-        private SolidColorBrush _colour = Brushes.Gray;
+        private SolidColorBrush _snakeBodyColour = Brushes.Gray;
 
-        public SolidColorBrush Colour => IsHead ? _snakeHeadColour : _colour; 
-        public UIElement UiElement { get; private set; }
-        public Point Position { get; set; }
         public bool IsHead { get; set; }
-
-        public void UpdateUIElement(double squareSize)
-        {
-            UiElement = new Rectangle
-            {
-                Width = squareSize,
-                Height = squareSize,
-                Fill = Colour
-            };
-        }
+        public override SolidColorBrush Colour => IsHead ? _snakeHeadColour : _snakeBodyColour;
 
         public void SetToBodyPart()
         {
             IsHead = false;
-            ((Rectangle) UiElement).Fill = _colour;
+            UiElement.SetValue(Shape.FillProperty, _snakeBodyColour);
         }
     }
 }
