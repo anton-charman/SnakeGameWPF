@@ -6,11 +6,11 @@ namespace SnakeGameWPF
 {
     public abstract class BaseElement
     {
-        public Point Position { get; set; }
-
         public abstract SolidColorBrush Colour { get; }
-    
-        public virtual UIElement UiElement { get; set; } = new Rectangle();
+
+        public abstract UIElement UiElement { get; set; }
+
+        public Point Position { get; set; }
 
         public void UpdateUIElement(double squareSize)
         {

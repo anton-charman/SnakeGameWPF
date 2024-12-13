@@ -1,4 +1,6 @@
-﻿using System.Windows.Media;
+﻿using System.Windows;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace SnakeGameWPF
 {
@@ -9,6 +11,7 @@ namespace SnakeGameWPF
 
         public bool IsEven { get; set; }
         public override SolidColorBrush Colour => IsEven ? _evenColour : _oddColour;
+        public override UIElement UiElement { get; set; } = new Rectangle();
 
         public Tile(double squareSize, int counter)
         {
