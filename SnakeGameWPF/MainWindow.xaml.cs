@@ -30,8 +30,10 @@ namespace SnakeGameWPF
         private readonly int _startingInterval = 400;
         private readonly int _minimumInterval = 100;
 
+        private bool _isRunning = false;
         public double TileSize => MainArea.ActualWidth / _numSquares;
         private double Interval => Math.Max(_startingInterval - _score * _multiplier, _minimumInterval);
+
 
         public MainWindow()
         {
@@ -91,18 +93,21 @@ namespace SnakeGameWPF
                 return;
             }
 
-            SnakeDirection prevDir = _snake.Direction;
-            _snake.UpdateDirection(e.Key);
-
-            // I don't like this block of code.
-            // It draws the snake before the timer ticks.
-            // This allows the user to speed up the snake movement speed by changing direction.
-            if (_snake.Direction != prevDir)
+            if(_isRunning)
             {
-                UpdateSnake();
-                DrawSnake();
-                DoCollisionCheck();
-            }
+                SnakeDirection prevDir = _snake.Direction;
+                _snake.UpdateDirection(e.Key);
+
+                // I don't like this block of code.
+                // It draws the snake before the timer ticks.
+                // This allows the user to speed up the snake movement speed by changing direction.
+                if (_snake.Direction != prevDir)
+                {
+                    UpdateSnake();
+                    DrawSnake();
+                    DoCollisionCheck();
+                }
+            }   
         }
 
         /// <summary>
@@ -126,6 +131,8 @@ namespace SnakeGameWPF
 
             borderWelcome.Visibility = Visibility.Collapsed;
             borderUserDied.Visibility = Visibility.Collapsed;
+
+            _isRunning = true;
         }
 
         /// <summary>
@@ -256,6 +263,7 @@ namespace SnakeGameWPF
         private void EndGame()
         {
             _dispatchTimer.Stop();
+            _isRunning = false;
             textBlockFinalScore.Text = _score.ToString();
             borderUserDied.Visibility = Visibility.Visible;
         }
