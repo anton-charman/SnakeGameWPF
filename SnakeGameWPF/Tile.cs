@@ -6,7 +6,7 @@ namespace SnakeGameWPF
 {
     public class Tile : BaseElement
     {
-        private readonly SolidColorBrush _evenColour = Brushes.LightGreen;
+        private readonly SolidColorBrush _evenColour = Brushes.Green;
         private readonly SolidColorBrush _oddColour = Brushes.DarkGreen;
 
         private bool _isEven; 

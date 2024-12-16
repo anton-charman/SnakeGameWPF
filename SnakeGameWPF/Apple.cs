@@ -18,10 +18,11 @@ namespace SnakeGameWPF
         /// </summary>
         public void UpdateAppleCoord(int numSquares, List<Point> snakePosList)
         {
+            // Place the apple anywhere apart from on the border.
             Position = new Point
             (
-                _rnd.Next(numSquares) * (double)UiElement.GetValue(Shape.WidthProperty), 
-                _rnd.Next(numSquares) * (double)UiElement.GetValue(Shape.HeightProperty)
+                _rnd.Next(1, numSquares - 1) * (double)UiElement.GetValue(Shape.WidthProperty), 
+                _rnd.Next(1, numSquares - 1) * (double)UiElement.GetValue(Shape.HeightProperty)
             );
             
             foreach (Point pos in snakePosList)
