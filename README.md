@@ -26,6 +26,7 @@ Download the code from GitHub here, build it and enjoy the game.
 
 ## Issues and improvements
 Here's a selection of items that I intend to implement next:
+* Refactor the codebase into MVVM.
 * Give the snake a snake-looking head that changes orientation with the snake motion.
 * Make the apple actual apple pixel art and not just a red circle.
 * Increase the granularity of the tiles to make motion smoother.
