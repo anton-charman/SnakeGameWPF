@@ -11,7 +11,7 @@ namespace SnakeGameWPF
         private Random _rnd = new Random();
 
         public override SolidColorBrush Colour => Brushes.Red;
-        public override UIElement UiElement { get; set; } = new Ellipse();
+        public override UIElement UiElement { get; } = new Ellipse();
 
         /// <summary>
         /// Get a new random apple coordinate unoccupied by the snake. 

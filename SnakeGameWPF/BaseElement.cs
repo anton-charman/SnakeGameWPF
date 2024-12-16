@@ -4,7 +4,7 @@ using System.Windows.Shapes;
 
 namespace SnakeGameWPF
 {
-    public abstract class BaseElement
+    public abstract class BaseElement : IElement
     {
         public BaseElement(double squareSize)
         {
@@ -13,7 +13,7 @@ namespace SnakeGameWPF
 
         public abstract SolidColorBrush Colour { get; }
 
-        public abstract UIElement UiElement { get; set; }
+        public abstract UIElement UiElement { get; }
 
         public Point Position { get; set; }
 

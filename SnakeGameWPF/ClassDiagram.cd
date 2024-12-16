@@ -6,6 +6,7 @@
       <HashCode>AAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAEBAAAAA=</HashCode>
       <FileName>BaseElement.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="SnakeGameWPF.Apple">
     <Position X="9" Y="5" Width="1.5" />
@@ -21,13 +22,6 @@
       <FileName>SnakeBodyPart.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="SnakeGameWPF.Tile">
-    <Position X="1" Y="5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>gAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBQAAAA=</HashCode>
-      <FileName>Tile.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="SnakeGameWPF.SnakeHead">
     <Position X="5" Y="5" Width="1.5" />
     <TypeIdentifier>
@@ -40,6 +34,13 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAAAAA=</HashCode>
       <FileName>SnakeTail.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SnakeGameWPF.Tile">
+    <Position X="1" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBQAAAA=</HashCode>
+      <FileName>Tile.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

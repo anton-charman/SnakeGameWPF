@@ -9,6 +9,6 @@ namespace SnakeGameWPF
         public SnakeHead(double squareSize) : base(squareSize) { }
 
         public override SolidColorBrush Colour => Brushes.Black;
-        public override UIElement UiElement { get; set; } = new Ellipse();
+        public override UIElement UiElement { get; } = new Ellipse();
     }
 }

@@ -9,13 +9,13 @@ namespace SnakeGameWPF
         private readonly SolidColorBrush _evenColour = Brushes.LightGreen;
         private readonly SolidColorBrush _oddColour = Brushes.DarkGreen;
 
-        public bool IsEven { get; set; }
-        public override SolidColorBrush Colour => IsEven ? _evenColour : _oddColour;
-        public override UIElement UiElement { get; set; } = new Rectangle();
+        private bool _isEven; 
+        public override SolidColorBrush Colour => _isEven ? _evenColour : _oddColour;
+        public override UIElement UiElement { get; } = new Rectangle();
 
         public Tile(double squareSize, int counter) : base(squareSize)
         {
-            IsEven = counter % 2 == 0;
+            _isEven = counter % 2 == 0;
             UpdateUIElement(squareSize);
         }
     }

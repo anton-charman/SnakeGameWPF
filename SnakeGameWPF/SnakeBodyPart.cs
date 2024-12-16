@@ -9,6 +9,6 @@ namespace SnakeGameWPF
         public SnakeBodyPart(double squareSize) : base(squareSize) { }
 
         public override SolidColorBrush Colour => Brushes.Gray;
-        public override UIElement UiElement { get; set; } = new Rectangle();
+        public override UIElement UiElement { get; } = new Rectangle();
     }
 }
