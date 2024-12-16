@@ -4,17 +4,14 @@ using System.Windows.Shapes;
 
 namespace SnakeGameWPF
 {
-    public class Apple : BaseElement
+    public class Apple : BaseElement 
     {
+        public Apple(double squareSize) : base(squareSize) { }
+
         private Random _rnd = new Random();
 
         public override SolidColorBrush Colour => Brushes.Red;
         public override UIElement UiElement { get; set; } = new Ellipse();
-
-        public Apple(double squareSize) 
-        {
-            UpdateUIElement(squareSize);
-        }
 
         /// <summary>
         /// Get a new random apple coordinate unoccupied by the snake. 

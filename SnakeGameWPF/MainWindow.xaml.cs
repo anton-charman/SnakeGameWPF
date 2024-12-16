@@ -31,7 +31,7 @@ namespace SnakeGameWPF
         private readonly int _minimumInterval = 100;
 
         private bool _isRunning = false;
-        public double TileSize => MainArea.ActualWidth / _numSquares;
+        private double _tileSize;
         private double Interval => Math.Max(_startingInterval - _score * _multiplier, _minimumInterval);
 
 
@@ -45,8 +45,9 @@ namespace SnakeGameWPF
         /// </summary>
         private void Window_ContentRendered(object sender, EventArgs e)
         { 
-            _snake = new Snake(_startLength, _startDirection, _startRow, _startCol, TileSize);
-            _apple = new Apple(TileSize);
+            _tileSize = MainArea.ActualWidth / _numSquares;
+            _snake = new Snake(_startLength, _startDirection, _startRow, _startCol, _tileSize);
+            _apple = new Apple(_tileSize);
 
             _dispatchTimer.Interval = TimeSpan.FromMilliseconds(Interval);
             _dispatchTimer.Tick += Timer_Tick;
@@ -64,10 +65,10 @@ namespace SnakeGameWPF
             {
                 for (int col = 0; col < _numSquares; col++)
                 {
-                    Tile tile = new Tile(TileSize, counter);
+                    Tile tile = new Tile(_tileSize, counter);
                     
-                    Canvas.SetTop(tile.UiElement, row * TileSize);
-                    Canvas.SetLeft(tile.UiElement, col * TileSize);
+                    Canvas.SetTop(tile.UiElement, row * _tileSize);
+                    Canvas.SetLeft(tile.UiElement, col * _tileSize);
                     MainArea.Children.Add(tile.UiElement);
 
                     counter++;
@@ -124,7 +125,7 @@ namespace SnakeGameWPF
 
             MainArea.Children.Remove(_apple.UiElement);
 
-            _snake.ResetSnake(_startLength, _startDirection, _startRow, _startCol, TileSize);
+            _snake.ResetSnake(_startLength, _startDirection, _startRow, _startCol, _tileSize);
 
             _score = 0;
             _dispatchTimer.Interval = TimeSpan.FromMilliseconds(Interval);
@@ -142,6 +143,7 @@ namespace SnakeGameWPF
         {
             UpdateTitle();
             DrawSnake();
+            
             _apple.UpdateAppleCoord(_numSquares, _snake.GetSnakePartCoords());
             DrawApple();
 
@@ -166,8 +168,6 @@ namespace SnakeGameWPF
             {
                 if (!MainArea.Children.Contains(snakeBodyPart.UiElement))
                 {
-                    snakeBodyPart.UpdateUIElement(TileSize);
-
                     Canvas.SetTop(snakeBodyPart.UiElement, snakeBodyPart.Position.Y);
                     Canvas.SetLeft(snakeBodyPart.UiElement, snakeBodyPart.Position.X);
                     MainArea.Children.Add(snakeBodyPart.UiElement);
@@ -199,8 +199,8 @@ namespace SnakeGameWPF
 
             MainArea.Children.Remove(_snake.SnakeList[0].UiElement);
             MainArea.Children.Remove(_snake.SnakeList[^1].UiElement);
-            _snake.SetToBodyParts();
-            _snake.UpdateHead(TileSize);
+            _snake.SetToBodyParts(_tileSize);
+            _snake.UpdateHead(_tileSize);
         }
 
         /// <summary>

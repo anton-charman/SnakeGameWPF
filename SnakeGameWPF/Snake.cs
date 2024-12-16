@@ -30,7 +30,7 @@ namespace SnakeGameWPF
             Direction = direction;
             SnakeList = new List<BaseElement>()
             {
-                new SnakeHead() { Position = new Point(row * squareSize, col * squareSize) }
+                new SnakeHead(squareSize) { Position = new Point(row * squareSize, col * squareSize) }
             };
         }
 
@@ -46,10 +46,10 @@ namespace SnakeGameWPF
         /// <summary>
         /// Mark all parts (including the old head) parts as body parts.
         /// </summary>
-        public void SetToBodyParts()
+        public void SetToBodyParts(double squareSize)
         {
-            SnakeList[0] = new SnakeTail() { Position = SnakeList[0].Position };
-            SnakeList[^1] = new SnakeBodyPart() { Position = SnakeList[^1].Position };
+            SnakeList[0] = new SnakeTail(squareSize) { Position = SnakeList[0].Position };
+            SnakeList[^1] = new SnakeBodyPart(squareSize) { Position = SnakeList[^1].Position };
         }
         
         /// <summary>
@@ -76,7 +76,7 @@ namespace SnakeGameWPF
             }
 
             // Add the new head. Defined as the last element.
-            SnakeList.Add(new SnakeHead() { Position = newPoint });
+            SnakeList.Add(new SnakeHead(squareSize) { Position = newPoint });
         }
 
         /// <summary>

@@ -1,42 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="SnakeGameWPF.BaseElement">
-    <Position X="6" Y="2.25" Width="1.5" />
+    <Position X="5" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAEBAAAAA=</HashCode>
       <FileName>BaseElement.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SnakeGameWPF.Apple">
-    <Position X="6" Y="5" Width="1.5" />
+    <Position X="9" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAAAAABAAAAAEBAAAAA=</HashCode>
       <FileName>Apple.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SnakeGameWPF.SnakeBodyPart">
-    <Position X="8.25" Y="5" Width="1.5" />
+    <Position X="3" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAAAAA=</HashCode>
       <FileName>SnakeBodyPart.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SnakeGameWPF.Tile">
-    <Position X="10.5" Y="5" Width="1.5" />
+    <Position X="1" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBQAAAA=</HashCode>
       <FileName>Tile.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SnakeGameWPF.SnakeHead">
-    <Position X="3.75" Y="5" Width="1.5" />
+    <Position X="5" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAAAAA=</HashCode>
       <FileName>SnakeHead.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SnakeGameWPF.SnakeTail">
-    <Position X="1.5" Y="5" Width="1.5" />
+    <Position X="7" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAAAAA=</HashCode>
       <FileName>SnakeTail.cs</FileName>

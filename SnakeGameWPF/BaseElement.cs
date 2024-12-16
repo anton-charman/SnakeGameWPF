@@ -6,6 +6,11 @@ namespace SnakeGameWPF
 {
     public abstract class BaseElement
     {
+        public BaseElement(double squareSize)
+        {
+            UpdateUIElement(squareSize);
+        }
+
         public abstract SolidColorBrush Colour { get; }
 
         public abstract UIElement UiElement { get; set; }
