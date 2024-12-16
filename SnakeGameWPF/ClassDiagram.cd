@@ -17,14 +17,14 @@
   <Class Name="SnakeGameWPF.SnakeBodyPart">
     <Position X="8.25" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAAAAA=</HashCode>
       <FileName>SnakeBodyPart.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SnakeGameWPF.Tile">
     <Position X="10.5" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQAAAA=</HashCode>
+      <HashCode>gAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBQAAAA=</HashCode>
       <FileName>Tile.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -38,7 +38,7 @@
   <Class Name="SnakeGameWPF.SnakeTail">
     <Position X="1.5" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAAAAA=</HashCode>
       <FileName>SnakeTail.cs</FileName>
     </TypeIdentifier>
   </Class>
