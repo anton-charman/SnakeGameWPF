@@ -14,12 +14,12 @@ This project is an implementation of Snake using a WPF front-end and C# code-beh
 
 Upon loading up the game you are greeted with the home screen:
 
-![HomeScreen](https://github.com/user-attachments/assets/a213ed8f-6e6c-42ef-bd8c-235dc6b449c2)
+![Home screen](https://github.com/user-attachments/assets/092c5eed-72d9-4870-9a40-4f8c74a9fbc3)
 
 
 Here's an in-game screenshot (can you beat my score?...):
 
-![MidGame](https://github.com/user-attachments/assets/56557876-2bf7-45ea-af5e-b44a5bdd19e2)
+![In-game](https://github.com/user-attachments/assets/bc731619-2168-4138-b2d9-75d7b3323431)
 
 ## Installation instructions
 Download the code from GitHub here, build it and enjoy the game.
