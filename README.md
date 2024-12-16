@@ -8,7 +8,7 @@ This project is an implementation of Snake using a WPF front-end and C# code-beh
 
 ✔ Eat apples to grow the snake.
 
-❌ Avoid the walls and your own tail.
+✔ Avoid the walls and your own tail.
 
 ## An example of what you will see...
 
