@@ -30,8 +30,10 @@ namespace SnakeGameWPF
         private readonly int _startingInterval = 400;
         private readonly int _minimumInterval = 100;
 
-        public double TileSize => MainArea.ActualWidth / _numSquares;
+        private bool _isRunning = false;
+        private double _tileSize;
         private double Interval => Math.Max(_startingInterval - _score * _multiplier, _minimumInterval);
+
 
         public MainWindow()
         {
@@ -43,8 +45,9 @@ namespace SnakeGameWPF
         /// </summary>
         private void Window_ContentRendered(object sender, EventArgs e)
         { 
-            _snake = new Snake(_startLength, _startDirection, _startRow, _startCol, TileSize);
-            _apple = new Apple(TileSize);
+            _tileSize = MainArea.ActualWidth / _numSquares;
+            _snake = new Snake(_startLength, _startDirection, _startRow, _startCol, _tileSize);
+            _apple = new Apple(_tileSize);
 
             _dispatchTimer.Interval = TimeSpan.FromMilliseconds(Interval);
             _dispatchTimer.Tick += Timer_Tick;
@@ -62,10 +65,10 @@ namespace SnakeGameWPF
             {
                 for (int col = 0; col < _numSquares; col++)
                 {
-                    Tile tile = new Tile(TileSize, counter);
+                    Tile tile = new Tile(_tileSize, counter);
                     
-                    Canvas.SetTop(tile.UiElement, row * TileSize);
-                    Canvas.SetLeft(tile.UiElement, col * TileSize);
+                    Canvas.SetTop(tile.UiElement, row * _tileSize);
+                    Canvas.SetLeft(tile.UiElement, col * _tileSize);
                     MainArea.Children.Add(tile.UiElement);
 
                     counter++;
@@ -91,18 +94,21 @@ namespace SnakeGameWPF
                 return;
             }
 
-            SnakeDirection prevDir = _snake.Direction;
-            _snake.UpdateDirection(e.Key);
-
-            // I don't like this block of code.
-            // It draws the snake before the timer ticks.
-            // This allows the user to speed up the snake movement speed by changing direction.
-            if (_snake.Direction != prevDir)
+            if(_isRunning)
             {
-                UpdateSnake();
-                DrawSnake();
-                DoCollisionCheck();
-            }
+                SnakeDirection prevDir = _snake.Direction;
+                _snake.UpdateDirection(e.Key);
+
+                // I don't like this block of code.
+                // It draws the snake before the timer ticks.
+                // This allows the user to speed up the snake movement speed by changing direction.
+                if (_snake.Direction != prevDir)
+                {
+                    UpdateSnake();
+                    DrawSnake();
+                    DoCollisionCheck();
+                }
+            }   
         }
 
         /// <summary>
@@ -112,20 +118,22 @@ namespace SnakeGameWPF
         {
             _dispatchTimer.Stop();
 
-            foreach (SnakeBodyPart part in _snake.SnakeList)
+            foreach (BaseElement part in _snake.SnakeList)
             {
                 MainArea.Children.Remove(part.UiElement);
             }
 
             MainArea.Children.Remove(_apple.UiElement);
 
-            _snake.ResetSnake(_startLength, _startDirection, _startRow, _startCol, TileSize);
+            _snake.ResetSnake(_startLength, _startDirection, _startRow, _startCol, _tileSize);
 
             _score = 0;
             _dispatchTimer.Interval = TimeSpan.FromMilliseconds(Interval);
 
             borderWelcome.Visibility = Visibility.Collapsed;
             borderUserDied.Visibility = Visibility.Collapsed;
+
+            _isRunning = true;
         }
 
         /// <summary>
@@ -135,6 +143,7 @@ namespace SnakeGameWPF
         {
             UpdateTitle();
             DrawSnake();
+            
             _apple.UpdateAppleCoord(_numSquares, _snake.GetSnakePartCoords());
             DrawApple();
 
@@ -155,16 +164,14 @@ namespace SnakeGameWPF
         /// </summary>
         private void DrawSnake()
         {
-            foreach (SnakeBodyPart snakeBodyPart in _snake.SnakeList)
+            foreach (BaseElement snakeBodyPart in _snake.SnakeList)
             {
-                if (snakeBodyPart.UiElement == null)
+                if (!MainArea.Children.Contains(snakeBodyPart.UiElement))
                 {
-                    snakeBodyPart.UpdateUIElement(TileSize);
-                    
                     Canvas.SetTop(snakeBodyPart.UiElement, snakeBodyPart.Position.Y);
                     Canvas.SetLeft(snakeBodyPart.UiElement, snakeBodyPart.Position.X);
                     MainArea.Children.Add(snakeBodyPart.UiElement);
-                }
+                }   
             }
         }
 
@@ -190,8 +197,10 @@ namespace SnakeGameWPF
                 _snake.SnakeList.RemoveAt(0);
             }
 
-            _snake.SetToBodyParts();
-            _snake.UpdateHead(TileSize);
+            MainArea.Children.Remove(_snake.SnakeList[0].UiElement);
+            MainArea.Children.Remove(_snake.SnakeList[^1].UiElement);
+            _snake.SetToBodyParts(_tileSize);
+            _snake.UpdateHead(_tileSize);
         }
 
         /// <summary>
@@ -254,6 +263,7 @@ namespace SnakeGameWPF
         private void EndGame()
         {
             _dispatchTimer.Stop();
+            _isRunning = false;
             textBlockFinalScore.Text = _score.ToString();
             borderUserDied.Visibility = Visibility.Visible;
         }

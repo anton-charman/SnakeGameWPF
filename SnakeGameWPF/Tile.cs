@@ -4,22 +4,19 @@ using System.Windows.Shapes;
 
 namespace SnakeGameWPF
 {
-    public class Tile
+    public class Tile : BaseElement
     {
         private readonly SolidColorBrush _evenColour = Brushes.LightGreen;
         private readonly SolidColorBrush _oddColour = Brushes.DarkGreen;
 
-        public UIElement UiElement { get; init; }
-        public Point Position { get; set; }
+        private bool _isEven; 
+        public override SolidColorBrush Colour => _isEven ? _evenColour : _oddColour;
+        public override UIElement UiElement { get; } = new Rectangle();
 
-        public Tile(double tileSize, int counter)
+        public Tile(double squareSize, int counter) : base(squareSize)
         {
-            UiElement = new Rectangle()
-            {
-                Width = tileSize,
-                Height = tileSize,
-                Fill = counter % 2 == 0 ? _evenColour : _oddColour
-            };
+            _isEven = counter % 2 == 0;
+            UpdateUIElement(squareSize);
         }
     }
 }

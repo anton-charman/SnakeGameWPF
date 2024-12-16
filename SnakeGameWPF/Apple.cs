@@ -1,31 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace SnakeGameWPF
 {
-    public class Apple
+    public class Apple : BaseElement 
     {
+        public Apple(double squareSize) : base(squareSize) { }
+
         private Random _rnd = new Random();
-        private SolidColorBrush _colour = Brushes.Red;
 
-        public UIElement UiElement { get; init; }
-        public Point Position { get; private set; }
-
-        public Apple(double squareSize) 
-        {
-            UiElement = new Ellipse()
-            {
-                Width = squareSize,
-                Height = squareSize,
-                Fill = _colour
-            };
-        }
+        public override SolidColorBrush Colour => Brushes.Red;
+        public override UIElement UiElement { get; } = new Ellipse();
 
         /// <summary>
         /// Get a new random apple coordinate unoccupied by the snake. 
@@ -34,8 +20,8 @@ namespace SnakeGameWPF
         {
             Position = new Point
             (
-                _rnd.Next(numSquares) * ((Ellipse)UiElement).Width, 
-                _rnd.Next(numSquares) * ((Ellipse)UiElement).Height
+                _rnd.Next(numSquares) * (double)UiElement.GetValue(Shape.WidthProperty), 
+                _rnd.Next(numSquares) * (double)UiElement.GetValue(Shape.HeightProperty)
             );
             
             foreach (Point pos in snakePosList)

@@ -4,11 +4,11 @@ using System.Windows.Shapes;
 
 namespace SnakeGameWPF
 {
-    public class SnakeBodyPart : BaseElement
+    public class SnakeTail : BaseElement
     {
-        public SnakeBodyPart(double squareSize) : base(squareSize) { }
+        public SnakeTail(double squareSize) : base(squareSize) { }
 
-        public override SolidColorBrush Colour => Brushes.Gray;
+        public override SolidColorBrush Colour => Brushes.Blue;
         public override UIElement UiElement { get; } = new Rectangle();
     }
 }
